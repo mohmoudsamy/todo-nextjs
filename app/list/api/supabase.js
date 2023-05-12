@@ -10,9 +10,9 @@ export const getAllLists = async () => {
   return { data, error };
 };
 
-export const insertNewList = async (listName) => {
+export const insertNewList = async (listName = "Untitled List", items) => {
   const { error } = await supabase
     .from("lists")
-    .insert({ list_name: listName });
+    .insert({ list_name: listName, items: items });
   return { error };
 };
