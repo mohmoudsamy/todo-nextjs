@@ -1,5 +1,5 @@
 "use client";
-import TaskContextProvider from "@/context/TaskContext";
+import TaskContextProvider from "@/context/ListContext";
 import { usePathname } from "next/navigation";
 import { Exo_2 } from "next/font/google";
 import Navbar from "@/components/Navbar";

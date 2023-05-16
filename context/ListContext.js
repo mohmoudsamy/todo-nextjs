@@ -1,29 +1,31 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useState, useRef } from "react";
 
-export const TaskContext = createContext();
-const TaskContextProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
+export const ListContext = createContext();
+const ListContextProvider = ({ children }) => {
+  const [lists, setLists] = useState([]);
   const [listValue, setListValue] = useState("");
   const [listCreatedVisible, setListCreatedVisible] = useState(false);
   const [selected, setSelcted] = useState("Click to select");
+  const itemInputRef = useRef(null);
 
   return (
-    <TaskContext.Provider
+    <ListContext.Provider
       value={{
         listValue,
         setListValue,
-        tasks,
-        setTasks,
+        lists,
+        setLists,
         selected,
         setSelcted,
         listCreatedVisible,
         setListCreatedVisible,
+        itemInputRef,
       }}
     >
       {children}
-    </TaskContext.Provider>
+    </ListContext.Provider>
   );
 };
 
-export default TaskContextProvider;
+export default ListContextProvider;

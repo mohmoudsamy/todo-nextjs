@@ -10,9 +10,27 @@ export const getAllLists = async () => {
   return { data, error };
 };
 
-export const insertNewList = async (listName = "Untitled List", items) => {
+export const getSingleList = async (id) => {
+  const { data, error } = await supabase
+    .from("lists")
+    .select()
+    .eq("id", id)
+    .single();
+  return { data, error };
+};
+
+export const insertNewList = async (
+  listName = "Untitled List",
+  items,
+  user
+) => {
   const { error } = await supabase
     .from("lists")
-    .insert({ list_name: listName, items: items });
+    .insert({ list_name: listName, items: items, user_id: user.id });
+  return { error };
+};
+
+export const deleteList = async (id) => {
+  const { error } = await supabase.from("lists").delete().eq("id", id);
   return { error };
 };

@@ -1,20 +1,20 @@
 "use client";
 import { useContext, useEffect } from "react";
-import { getAllLists } from "./user/api/supabase";
-import { getCurrentUser } from "./auth/api/supabase";
+import { getAllLists } from "../api/supabase";
+import { getCurrentUser } from "@/app/auth/api/supabase";
 import { ListContext } from "@/context/ListContext";
+import { AuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import List from "@/components/List";
 
-export default function Home() {
+const MyLists = () => {
   const { lists, setLists } = useContext(ListContext);
+  //   const { user, setUser } = useContext(AuthContext);
+
   const userLists = async () => {
     try {
       const { data } = await getAllLists();
-      const { user } = await getCurrentUser();
-      if (user?.aud === "authenticated") {
-        setLists(data);
-      }
+      setLists(data);
     } catch (error) {
       throw new Error(error);
     }
@@ -42,4 +42,12 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+// MyLists.getInitialProps = async (z) => {
+//   getCurrentUser().then(({ user }) => {
+//     setUser(user);
+//   });
+// };
+
+export default MyLists;

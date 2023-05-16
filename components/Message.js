@@ -1,7 +1,8 @@
+"use client";
 import React, { useContext, useEffect } from "react";
-import { TaskContext } from "@/context/TaskContext";
+import { ListContext } from "@/context/ListContext";
 const Message = () => {
-  const { listCreatedVisible, setListCreatedVisible } = useContext(TaskContext);
+  const { listCreatedVisible, setListCreatedVisible } = useContext(ListContext);
   useEffect(() => {
     if (listCreatedVisible) {
       setTimeout(() => {

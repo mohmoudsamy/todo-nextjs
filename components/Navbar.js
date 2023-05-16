@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { Dancing_Script } from "next/font/google";
 import Link from "next/link";
+import { Dancing_Script } from "next/font/google";
 import Button from "./Button";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/context/AuthContext";
@@ -15,9 +15,6 @@ const dancingScript = Dancing_Script({
 const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
   const pathname = usePathname();
-  const path = pathname.split("/").at(2);
-  const routes = ["view", "new"];
-  const links = ["Home", "My Lists", "New List"];
   useEffect(() => {
     getCurrentUser().then(({ user }) => {
       setUser(user);
@@ -35,27 +32,19 @@ const Navbar = () => {
           </div>
         </Link>
         <ul className="flex justify-between items-center col-span-1 text-lg">
-          {user !== null ? (
-            links.map((link, i) => {
-              return (
-                <li
-                  key={i}
-                  className={path !== routes[i - 1] ? "" : "text-font"}
-                >
-                  <Link href={link !== "Home" ? "/list/" + routes[i - 1] : "/"}>
-                    {link}
-                  </Link>
-                </li>
-              );
-            })
-          ) : (
-            <li className="text-font">
-              <Link href="/">Home</Link>
+          <li className={pathname === "/" ? "text-font" : ""}>
+            <Link href="/">Home</Link>
+          </li>
+          <li className={pathname === "/user/" + user?.id ? "text-font" : ""}>
+            <Link href={"/user/" + user?.id}>My Lists</Link>
+          </li>
+          {user && (
+            <li className={pathname === "/list/new" ? "text-font" : ""}>
+              <Link href="/list/new">New List</Link>
             </li>
           )}
         </ul>
         <div className="col-span-3 text-right flex justify-self-end">
-          {console.log()}
           {user === null ? (
             <>
               <Link href="/auth/login" className="mr-4">
