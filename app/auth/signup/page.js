@@ -95,10 +95,10 @@ const Signup = () => {
               </Link>
             </div>
           </div>
-          <div className="centered-between">
+          <div className="flex justify-between items-center">
             <Input
               placeholder="First Name"
-              customStyle="mr-4"
+              containerStyle="mr-4"
               value={credentials?.firstName}
               onChangeHandler={(e) =>
                 setCredentials({ ...credentials, firstName: e.target.value })

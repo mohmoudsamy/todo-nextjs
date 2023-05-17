@@ -38,7 +38,7 @@ const Login = () => {
         setMessages({ ...messages, success: "User Logged in successfully" });
         setVisibleSuccessMessage(true);
         setUser(data?.user);
-        setTimeout(() => router.push("/"), 3000);
+        setTimeout(() => router.push("/"), 1000);
         console.log(data.user);
       }
     } catch (error) {
@@ -52,12 +52,12 @@ const Login = () => {
     if (visibleErrorMessage) {
       timeout = setTimeout(() => {
         setVisibleErrorMessage(false);
-      }, 3000);
+      }, 2000);
     }
     if (visibleSuccessMessage) {
       timeout = setTimeout(() => {
         setVisibleSuccessMessage(false);
-      }, 3000);
+      }, 2000);
     }
 
     return () => clearTimeout(timeout);
@@ -116,11 +116,6 @@ const Login = () => {
               }
             />
           </>
-          <div className="text-font my-2">
-            <Link href="/auth/reset" className="text-primary">
-              Forgot Password?
-            </Link>
-          </div>
           <div>
             <Button type="submit" btnName="Login" />
           </div>

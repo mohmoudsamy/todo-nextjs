@@ -8,9 +8,10 @@ const Form = ({
   handleIconOnClick,
   value,
   onChangeHandler,
+  containerStyle,
 }) => {
   return (
-    <>
+    <div className={`relative ${containerStyle}`}>
       <input
         type={type || "text"}
         placeholder={placeholder}
@@ -26,7 +27,7 @@ const Form = ({
           {icon}
         </label>
       ) : null}
-    </>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import { createContext, useState, useRef } from "react";
 export const ListContext = createContext();
 const ListContextProvider = ({ children }) => {
   const [lists, setLists] = useState([]);
+  const [list, setList] = useState({});
   const [listValue, setListValue] = useState("");
   const [listCreatedVisible, setListCreatedVisible] = useState(false);
   const [selected, setSelcted] = useState("Click to select");
@@ -21,6 +22,8 @@ const ListContextProvider = ({ children }) => {
         listCreatedVisible,
         setListCreatedVisible,
         itemInputRef,
+        list,
+        setList,
       }}
     >
       {children}

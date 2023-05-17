@@ -27,6 +27,7 @@ const NewList = () => {
       const { error } = await insertNewList(listValue, items, user);
       if (!error) {
         setListValue("");
+        setItems([]);
         setListCreatedVisible(true);
       }
     } catch (error) {

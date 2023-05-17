@@ -19,6 +19,14 @@ export const getSingleList = async (id) => {
   return { data, error };
 };
 
+export const getUserLists = async (user_id) => {
+  const { data, error } = await supabase
+    .from("lists")
+    .select()
+    .eq("user_id", user_id);
+  return { data, error };
+};
+
 export const insertNewList = async (
   listName = "Untitled List",
   items,
@@ -28,6 +36,15 @@ export const insertNewList = async (
     .from("lists")
     .insert({ list_name: listName, items: items, user_id: user.id });
   return { error };
+};
+
+export const markCompletedList = async (status, list_id, item_id) => {
+  const data = await supabase
+    .from("lists")
+    .update({ status })
+    .eq("id", list_id);
+  console.log(data);
+  return data;
 };
 
 export const deleteList = async (id) => {
