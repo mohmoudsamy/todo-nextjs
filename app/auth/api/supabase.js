@@ -12,6 +12,13 @@ export const signUpUser = async ({ firstName, lastName, email, password }) => {
     email,
     password,
   });
+
+  const userData = await supabase.from("users").insert({
+    first_name: firstName,
+    last_name: lastName,
+    email,
+  });
+  console.log(userData);
   return { data, error };
 };
 
@@ -28,6 +35,15 @@ export const getCurrentUser = async () => {
     data: { user },
   } = await supabase.auth.getUser();
   return { user };
+};
+
+export const getUserData = async (userEmail) => {
+  const { data } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", userEmail)
+    .single();
+  return { data };
 };
 
 export const logOutUser = async () => {

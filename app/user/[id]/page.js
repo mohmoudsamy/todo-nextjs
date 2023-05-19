@@ -1,31 +1,30 @@
 "use client";
-import { useContext, useEffect } from "react";
-import { getUserLists, getAllLists } from "../api/supabase";
-import { ListContext } from "@/context/ListContext";
-import { AuthContext } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
+import { getUserLists } from "../api/supabase";
+import { getCurrentUser } from "@/app/auth/api/supabase";
 import Link from "next/link";
 import List from "@/components/List";
 
 const MyLists = () => {
-  const { lists, setLists } = useContext(ListContext);
-  const { user } = useContext(AuthContext);
+  const [userLists, setUserLists] = useState();
 
-  const userLists = async () => {
+  const fetchUserLists = async () => {
     try {
+      const { user } = await getCurrentUser();
       const { data } = await getUserLists(user?.id);
-      setLists(data);
+      setUserLists(data);
     } catch (error) {
       throw new Error(error);
     }
   };
   useEffect(() => {
-    userLists();
+    fetchUserLists();
   }, []);
 
   return (
     <div>
       <div className="bg-teriary w-4/6 m-auto">
-        {lists?.length <= 0 ? (
+        {userLists?.length <= 0 ? (
           <div className="text-5xl text-center text-font mt-10">
             <p>No Lists to show</p>
             <Link
@@ -36,17 +35,11 @@ const MyLists = () => {
             </Link>
           </div>
         ) : (
-          <List lists={lists} />
+          <List lists={userLists} />
         )}
       </div>
     </div>
   );
 };
-
-// MyLists.getInitialProps = async (z) => {
-//   getCurrentUser().then(({ user }) => {
-//     setUser(user);
-//   });
-// };
 
 export default MyLists;

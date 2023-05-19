@@ -8,11 +8,11 @@ import Item from "@/components/Item";
 import Link from "next/link";
 
 const NewList = () => {
-  const { listValue, setListValue, setListCreatedVisible } =
-    useContext(ListContext);
-  let [itemValue, setItemValue] = useState(null);
+  const { setListCreatedVisible } = useContext(ListContext);
+  const [listValue, setListValue] = useState("");
+  let [itemValue, setItemValue] = useState("");
   const [id, setId] = useState(1);
-  const [items, setItems] = useState([]);
+  let [items, setItems] = useState([]);
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -28,11 +28,25 @@ const NewList = () => {
       if (!error) {
         setListValue("");
         setItems([]);
+        setItemValue("");
         setListCreatedVisible(true);
       }
     } catch (error) {
       throw new Error(error);
     }
+  };
+
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    if (itemValue.length <= 0) {
+      return null;
+    }
+    setId(id + 1);
+    setItems((oldArray) => [
+      ...oldArray,
+      { id: id, content: itemValue, status: false },
+    ]);
+    setItemValue("");
   };
 
   return (
@@ -64,7 +78,10 @@ const NewList = () => {
               </div>
             </form>
             <div className="m-auto mt-6 w-4/6 flex flex-col items-start text-lg">
-              <div className="w-full flex items-start">
+              <form
+                className="w-full flex items-start"
+                onSubmit={(e) => handleAddItem(e)}
+              >
                 <div className="mr-4">
                   <input
                     className="w-full bg-tertiary/40 py-1 px-4 rounded-sm focus:outline-none"
@@ -79,30 +96,20 @@ const NewList = () => {
                     type="button"
                     className="bg-primary px-4 py-1 rounded-sm"
                     title="Add Item"
-                    onClick={() => {
-                      if (itemValue.length <= 0) {
-                        return null;
-                      }
-                      setId(id + 1);
-                      setItems((oldArray) => [
-                        ...oldArray,
-                        { id: id, content: itemValue },
-                      ]);
-                      setItemValue("");
-                    }}
+                    onClick={(e) => handleAddItem(e)}
                   >
                     +
                   </button>
                 </div>
-              </div>
+              </form>
               <div className="mt-6 w-4/6 text-font">
                 {items?.map((item, i) => {
                   return (
                     <div
                       className="bg-tertiary/40 w-full rounded-sm py-2 px-4 flex justify-between items-center mb-4"
-                      key={i * Math.random() * 5454545}
+                      key={item.id}
                     >
-                      <Item itemNewValue={item.content} index={i + 1} />
+                      <Item itemValue={item.content} index={i + 1} />
                     </div>
                   );
                 })}

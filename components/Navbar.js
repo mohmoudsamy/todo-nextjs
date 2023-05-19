@@ -3,9 +3,13 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Dancing_Script } from "next/font/google";
 import Button from "./Button";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import { getCurrentUser, logOutUser } from "@/app/auth/api/supabase";
+import {
+  getCurrentUser,
+  logOutUser,
+  getUserData,
+} from "@/app/auth/api/supabase";
 
 const dancingScript = Dancing_Script({
   weight: "400",
@@ -14,12 +18,19 @@ const dancingScript = Dancing_Script({
 
 const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState(null);
   const pathname = usePathname();
   useEffect(() => {
     getCurrentUser().then(({ user }) => {
       setUser(user);
     });
   }, []);
+
+  useEffect(() => {
+    getUserData(user?.email).then(({ data }) => {
+      setUserInfo(data);
+    });
+  }, [user]);
 
   return (
     <nav className="border-b-2 border-font/10 py-3 ">
@@ -55,14 +66,22 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <Button
-              btnName="Logout"
-              customStyle="bg-tertiary w-fit px-6"
-              onClickHandler={() => {
-                logOutUser();
-                setUser(null);
-              }}
-            />
+            <div>
+              <h1>
+                Welcome{" "}
+                <span className="text-primary text-xl">
+                  {userInfo?.first_name + " " + userInfo?.last_name}
+                </span>
+              </h1>
+              <Button
+                btnName="Logout"
+                customStyle="bg-tertiary w-fit px-6"
+                onClickHandler={() => {
+                  logOutUser();
+                  setUser(null);
+                }}
+              />
+            </div>
           )}
         </div>
       </div>

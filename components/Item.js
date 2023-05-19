@@ -1,40 +1,57 @@
 "use client";
-import { useEffect } from "react";
-import { ListContext } from "@/context/ListContext";
-import { useRef, useState, useContext } from "react";
-import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
-// import { markCompleted } from "@/app/user/api/supabase";
+import { useRef } from "react";
 import { BsCheckCircleFill, BsCheckCircle } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
 
-const Item = ({ itemNewValue, index, status }) => {
+const Item = ({
+  itemValue,
+  index,
+  user,
+  list,
+  completedItem,
+  item,
+  setItem,
+  handleMarkCompleteItem,
+}) => {
   const itemRef = useRef(null);
-  const [checked, setChecked] = useState(false);
-  const [editStatus, setEditStatus] = useState(true);
-  const { list, itemInputRef } = useContext(ListContext);
-
-  // console.log(checked);
-
-  // const handleCompleted = async (e) => {
-  //   setChecked(!checked);
-  //   const data = await markCompleted(checked, list.id, index);
-  // };
 
   return (
     <>
-      <p className="mr-8 w-full flex items-center" ref={itemRef}>
-        <span className="mr-2">{index}. </span>
-        <span className={status ? "line-through" : ""}>{itemNewValue}</span>
-      </p>
-      <div className="flex justify-between items-center w-[50px]">
-        <p
-          className={`cursor-pointer hover:text-[#66e153] ml-4 relative ${
-            status ? "text-[#66e153]" : "text-heading"
-          }`}
-          // onClick={(e) => handleCompleted(e)}
-        >
-          {status ? <BsCheckCircleFill /> : <BsCheckCircle />}
-          <span className="absolute w-full h-full cursor-pointer top-0 left-0"></span>
-        </p>
+      <div
+        className="mr-8 w-full flex justify-between bg-secondary p-3 items-center"
+        ref={itemRef}
+      >
+        <div className={`flex ${item.status ? "line-through" : ""}`}>
+          <h2>
+            {index}. {itemValue}
+          </h2>
+        </div>
+        {user?.user?.id === list?.user_id ? (
+          <div className="flex justify-center items-center">
+            <p
+              className={`cursor-pointer hover:text-[#66e153] ml-4 relative ${
+                item.status ? "text-[#66e153]" : "text-heading"
+              }`}
+              onClick={() => {
+                handleMarkCompleteItem(item);
+              }}
+            >
+              {item.status ? <BsCheckCircleFill /> : <BsCheckCircle />}
+            </p>
+            <p
+              className="text-xl cursor-pointer text-[#f14832] hover:text-heading ml-4 relative"
+              onClick={(e) => {
+                e.target.closest("div").parentElement.parentElement.remove();
+                setItem(item);
+              }}
+            >
+              <FaRegTrashAlt />
+              <span className="w-full h-full absolute inset-0"></span>
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

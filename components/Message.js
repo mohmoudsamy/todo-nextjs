@@ -7,7 +7,7 @@ const Message = () => {
     if (listCreatedVisible) {
       setTimeout(() => {
         setListCreatedVisible(false);
-      }, 3000);
+      }, 2000);
     }
   }, [listCreatedVisible]);
   return (
