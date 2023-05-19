@@ -68,7 +68,6 @@ const EditList = () => {
         item?.id
       );
       setCompletedItem(!completedItem);
-      console.log(data);
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -128,7 +127,6 @@ const EditList = () => {
                     setItem={setItem}
                     handleMarkCompleteItem={handleMarkCompleteItem}
                     handleDeleteItem={handleDeleteItem}
-                    completedItem={completedItem}
                   />
                 </div>
               );

@@ -30,13 +30,13 @@ const Item = ({
           <div className="flex justify-center items-center">
             <p
               className={`cursor-pointer hover:text-[#66e153] ml-4 relative ${
-                item.status ? "text-[#66e153]" : "text-heading"
+                item?.status ? "text-[#66e153]" : "text-heading"
               }`}
               onClick={() => {
                 handleMarkCompleteItem(item);
               }}
             >
-              {item.status ? <BsCheckCircleFill /> : <BsCheckCircle />}
+              {item?.status ? <BsCheckCircleFill /> : <BsCheckCircle />}
             </p>
             <p
               className="text-xl cursor-pointer text-[#f14832] hover:text-heading ml-4 relative"
