@@ -14,7 +14,7 @@ const Lists = ({ lists }) => {
 
   return (
     <div className="grid grid-cols-3 gap-4 mt-10">
-      {lists?.map((list, i) => {
+      {lists?.map((list) => {
         return (
           <div className="bg-tertiary p-4 rounded-sm" key={list.id}>
             <h2 className="mb-4">
@@ -33,7 +33,6 @@ const Lists = ({ lists }) => {
               {list?.items?.map((item, i) => {
                 return item.id <= 3 ? (
                   <li className="hover:bg-secondary p-2" key={item.id}>
-                    <span>{item.id}. </span>
                     <span>{item.content}</span>
                   </li>
                 ) : item.id === 4 ? (

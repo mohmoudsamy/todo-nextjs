@@ -34,7 +34,7 @@ const List = () => {
           {list?.items?.map((item) => {
             return (
               <div className="flex bg-secondary mb-5 py-2 px-4" key={item.id}>
-                <Item index={item.id} itemValue={item.content} />
+                <Item itemValue={item.content} />
               </div>
             );
           })}

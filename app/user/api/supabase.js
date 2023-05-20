@@ -57,15 +57,14 @@ export const updateList = async (list_id, newListName) => {
   return { data, error };
 };
 
-export const addNewItem = async (items, item, list_id) => {
+export const addNewItem = async (items, list_id) => {
   const { data, error } = await supabase
     .from("lists")
     .update({
-      items: [...items, item],
+      items: [...items],
     })
     .eq("id", list_id)
     .select();
-  console.log(data);
   return { data, error };
 };
 

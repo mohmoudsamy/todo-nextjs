@@ -1,6 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   getSingleList,
   deleteList,
@@ -22,19 +23,20 @@ const EditList = () => {
   const [list, setList] = useState([]);
   const [updateValue, setUpdateValue] = useState("");
   const [item, setItem] = useState({});
+  const [newItem, setNewItem] = useState({});
   const [newItemValue, setNewItemValue] = useState("");
   const [items, setItems] = useState([]);
-  const [id, setId] = useState(0);
 
   useEffect(() => {
     getCurrentUser().then((user) => {
       setUser(user);
+      if (!user) {
+        router.push("/");
+      }
     });
-    if (!user) {
-      router.push("/");
-    }
     getSingleList(path).then(({ data }) => {
       setList(data);
+      setItems(data?.items);
       setUpdateValue(data?.list_name);
     });
   }, []);
@@ -83,8 +85,10 @@ const EditList = () => {
 
   // invoke Delete Item
   const handleDeleteItem = async () => {
+    console.log(item);
     try {
-      const { data, error } = await deleteItem(list?.id, list?.items, item?.id);
+      const { data, error } = await deleteItem(list?.id, items, item?.id);
+      console.log(items);
       if (error) console.log(error);
     } catch (error) {
       throw new Error(error);
@@ -97,117 +101,99 @@ const EditList = () => {
 
   // Add New Item
 
-  const handleAddNewItem = (e) => {
+  const handleSubmitNewItem = async (e) => {
     e.preventDefault();
     if (newItemValue.length <= 0) {
       return null;
     }
-    setId(id + 1);
-    setItem({ id: id, content: newItemValue, status: false });
-    // setNewItemValue("");
-  };
+    const itemId = items.at(items.length - 1);
 
-  const AddItem = async () => {
-    try {
-      const { data, error } = await addNewItem(list?.items, item, list?.id);
-      console.log(data);
-      if (error) console.log(error);
-    } catch (error) {
-      throw new Error(error);
-    }
+    setNewItem({
+      id: itemId?.id ? itemId?.id + 1 : 1,
+      content: newItemValue,
+      status: false,
+    });
   };
+  useEffect(() => {
+    setItems((prevItem) => [...prevItem, newItem]);
+  }, [newItem]);
 
   useEffect(() => {
-    AddItem();
-  }, [item]);
-
-  console.log(item);
+    addNewItem(items, list?.id).then(() => setNewItemValue(""));
+  }, [items]);
 
   return (
-    <>
-      {!user ? (
-        <div className="text-center text-4xl text-[#f52e2e]">
-          You are not allowed to show this page
-        </div>
-      ) : (
-        <div>
-          <h1 className="text-center text-5xl my-8 text-primary">
-            Edit Your List
-          </h1>
-          <div className="container w-6/12 bg-tertiary pb-2 mt-4">
-            <div className="mb-8 pt-4 px-6 pb-8 text-2xl flex justify-between items-center border-b-[1px] border-font">
-              <div className="flex justify-between items-center w-full mr-4">
-                <label className="text-lg mr-2" htmlFor="list">
-                  List
-                </label>
-                <input
-                  id="list"
-                  className="w-full text-font focus:text-heading bg-secondary py-1 px-3 rounded-sm focus:outline-none"
-                  type="text"
-                  value={updateValue}
-                  onChange={(e) => setUpdateValue(e.target.value)}
-                />
-              </div>
-              <div className="w-1/12 flex justify-between items-center text-lg">
-                <span
-                  className="cursor-pointer text-[#f14832] hover:text-heading ml-4"
-                  onClick={handleDeleteList}
-                >
-                  <FaRegTrashAlt />
-                </span>
-              </div>
-            </div>
-            {/*  */}
-            <form className="my-4 flex items-center w-full px-6">
-              <label className="mr-4" htmlFor="item">
-                Item
-              </label>
-              <input
-                id="item"
-                className="w-5/6 bg-secondary/60 py-1 px-4 rounded-sm focus:outline-none"
-                type="text"
-                value={newItemValue}
-                onChange={(e) => setNewItemValue(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="bg-primary px-4 py-1 rounded-sm"
-                title="Add Item"
-                onClick={(e) => handleAddNewItem(e)}
-              >
-                +
-              </button>
-            </form>
-            {/*  */}
-            <div className="px-20 mt-10">
-              {list?.items?.length > 0 ? (
-                list?.items?.map((item) => {
-                  return (
-                    <div
-                      className="mb-5 flex justify-between items-center"
-                      key={item.id}
-                    >
-                      <EditItem
-                        itemValue={item.content}
-                        index={item.id}
-                        user={user}
-                        list={list}
-                        item={item}
-                        setItem={setItem}
-                        handleMarkCompleteItem={handleMarkCompleteItem}
-                        handleDeleteItem={handleDeleteItem}
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="text-center text-xl text-font">No Items</div>
-              )}
-            </div>
+    <div>
+      <h1 className="text-center text-5xl my-8 text-primary">Edit Your List</h1>
+      <div className="container w-6/12 bg-tertiary pb-2 mt-4">
+        <div className="mb-8 pt-4 px-6 pb-8 text-2xl flex justify-between items-center border-b-[1px] border-font">
+          <div className="flex justify-between items-center w-full mr-4">
+            <label className="text-lg mr-2" htmlFor="list">
+              List
+            </label>
+            <input
+              id="list"
+              className="w-full text-font focus:text-heading bg-secondary py-1 px-3 rounded-sm focus:outline-none"
+              type="text"
+              value={updateValue}
+              onChange={(e) => setUpdateValue(e.target.value)}
+            />
+          </div>
+          <div className="w-1/12 flex justify-between items-center text-lg">
+            <span
+              className="cursor-pointer text-[#f14832] hover:text-heading ml-4"
+              onClick={handleDeleteList}
+            >
+              <FaRegTrashAlt />
+            </span>
           </div>
         </div>
-      )}
-    </>
+        {/*  */}
+        <form
+          className="my-4 flex items-center w-full px-6"
+          onSubmit={handleSubmitNewItem}
+        >
+          <label className="mr-4" htmlFor="item">
+            Item
+          </label>
+          <input
+            id="item"
+            className="w-5/6 bg-secondary/60 py-1 px-4 rounded-sm focus:outline-none mr-4"
+            type="text"
+            value={newItemValue}
+            onChange={(e) => setNewItemValue(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-primary px-4 py-1 rounded-sm"
+            title="Add Item"
+          >
+            +
+          </button>
+        </form>
+        {/*  */}
+        <div className="px-20 mt-10">
+          {items?.length > 0 ? (
+            items?.map((item, i) => {
+              return (
+                <div className="mb-5 flex justify-between items-center" key={i}>
+                  <EditItem
+                    itemValue={item.content}
+                    user={user}
+                    item={item}
+                    setItem={setItem}
+                    handleMarkCompleteItem={handleMarkCompleteItem}
+                    handleDeleteItem={handleDeleteItem}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center text-xl text-font">No Items</div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
