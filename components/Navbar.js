@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Dancing_Script } from "next/font/google";
 import Button from "./Button";
@@ -20,6 +20,7 @@ const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState(null);
   const pathname = usePathname();
+  const router = useRouter();
   useEffect(() => {
     getCurrentUser().then(({ user }) => {
       setUser(user);
@@ -77,7 +78,9 @@ const Navbar = () => {
                 btnName="Logout"
                 customStyle="bg-tertiary w-fit px-6"
                 onClickHandler={() => {
-                  logOutUser();
+                  logOutUser().then(() => {
+                    router.push("/");
+                  });
                   setUser(null);
                 }}
               />

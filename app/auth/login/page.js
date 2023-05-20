@@ -39,7 +39,6 @@ const Login = () => {
         setVisibleSuccessMessage(true);
         setUser(data?.user);
         setTimeout(() => router.push("/"), 1000);
-        console.log(data.user);
       }
     } catch (error) {
       setMessages({ ...messages, error: error.message });

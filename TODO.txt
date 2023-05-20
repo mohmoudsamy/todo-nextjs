@@ -1,1 +1,5 @@
-TODO: Add Loader for each component
+TODO: My Lists (not loged in) => Redirect to login page. ✅
+TODO: View Others list doen't work. ✅
+TODO: See more button doesn't work. ✅
+TODO: Remove actions in new list page. ✅
+TODO: Viewing edit page of others. ✅

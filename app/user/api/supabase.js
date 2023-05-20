@@ -57,10 +57,21 @@ export const updateList = async (list_id, newListName) => {
   return { data, error };
 };
 
+export const addNewItem = async (items, item, list_id) => {
+  const { data, error } = await supabase
+    .from("lists")
+    .update({
+      items: [...items, item],
+    })
+    .eq("id", list_id)
+    .select();
+  console.log(data);
+  return { data, error };
+};
+
 export const markCompletedItem = async (items, list_id, item_id) => {
   const item = await items.find((item) => item.id === item_id);
   item.status = !item.status;
-  console.log(item);
   const { data, error } = await supabase
     .from("lists")
     .update({

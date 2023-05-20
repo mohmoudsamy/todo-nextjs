@@ -10,9 +10,9 @@ import Link from "next/link";
 const NewList = () => {
   const { setListCreatedVisible } = useContext(ListContext);
   const [listValue, setListValue] = useState("");
-  let [itemValue, setItemValue] = useState("");
+  const [itemValue, setItemValue] = useState("");
   const [id, setId] = useState(1);
-  let [items, setItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [user, setUser] = useState();
 
   useEffect(() => {
