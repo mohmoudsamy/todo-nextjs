@@ -1,8 +1,0 @@
-### Welcome to todo list application coded by next.js and supabase
-
-## Firstly, I prepared how the database is configured.
-## Two tables one for the lists and the other for the users info.
-
-## As authentication process is provided by the database, I used the process to create a user and then let him log to save the list he creates based on its id (table => lists: column => user_id).
-
-## Each authenticated user can edit its own lists and only see the lists of others.
