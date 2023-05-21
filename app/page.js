@@ -5,19 +5,6 @@ import Loading from "@/components/Loading";
 
 export default async function Home() {
   const { data } = await getAllLists();
-  console.log(data);
-  // const [allLists, setAllLists] = useState([]);
-  // const fetchAllLists = async () => {
-  //   try {
-  //     const { data } = await getAllLists();
-  //     setAllLists(data);
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchAllLists();
-  // }, []);
 
   return (
     <div className="bg-teriary w-4/6 m-auto">
@@ -41,13 +28,4 @@ export default async function Home() {
       asdsad
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  try {
-    const { data } = await getAllLists();
-    return { props: data };
-  } catch (error) {
-    throw new Error(error);
-  }
 }
