@@ -31,11 +31,11 @@ const Lists = ({ lists }) => {
             </h2>
             <ul>
               {list?.items?.map((item, i) => {
-                return item.id <= 3 ? (
+                return i <= 2 ? (
                   <li className="hover:bg-secondary p-2" key={item.id}>
                     <span>{item.content}</span>
                   </li>
-                ) : item.id === 4 ? (
+                ) : i === 3 ? (
                   <Link
                     className="text-primary text-center border-t-[1px] border-font text-xl hover:text-font block"
                     href={

@@ -1,7 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 import {
   getSingleList,
   deleteList,
@@ -13,6 +12,7 @@ import {
 import { getCurrentUser } from "@/app/auth/api/supabase";
 import { FaRegTrashAlt } from "react-icons/fa";
 import EditItem from "@/components/EditItem";
+import Filter from "@/components/Filter";
 
 const EditList = () => {
   const pathname = usePathname();
@@ -26,6 +26,7 @@ const EditList = () => {
   const [newItem, setNewItem] = useState({});
   const [newItemValue, setNewItemValue] = useState("");
   const [items, setItems] = useState([]);
+  const [filterId, setFilterId] = useState("");
 
   useEffect(() => {
     getCurrentUser().then((user) => {
@@ -38,6 +39,7 @@ const EditList = () => {
       setList(data);
       setItems(data?.items);
       setUpdateValue(data?.list_name);
+      setFilterId("all");
     });
   }, []);
 
@@ -122,6 +124,19 @@ const EditList = () => {
     addNewItem(items, list?.id).then(() => setNewItemValue(""));
   }, [items]);
 
+  // Filter the list
+  // useEffect(() => {
+  //   setFilteredItems(items);
+  // console.log(filteredItems);
+  // }, [filteredItems]);
+
+  // useEffect(() => {
+  //   const filter = items.filter((item) =>
+  //     filterId !== "all" ? item.status === false : item.status === true
+  //   );
+  //   setFilteredItems(filter);
+  // }, [filterId, filteredItems]);
+
   return (
     <div>
       <h1 className="text-center text-5xl my-8 text-primary">Edit Your List</h1>
@@ -149,28 +164,25 @@ const EditList = () => {
           </div>
         </div>
         {/*  */}
-        <form
-          className="my-4 flex items-center w-full px-6"
-          onSubmit={handleSubmitNewItem}
-        >
-          <label className="mr-4" htmlFor="item">
-            Item
-          </label>
-          <input
-            id="item"
-            className="w-5/6 bg-secondary/60 py-1 px-4 rounded-sm focus:outline-none mr-4"
-            type="text"
-            value={newItemValue}
-            onChange={(e) => setNewItemValue(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="bg-primary px-4 py-1 rounded-sm"
-            title="Add Item"
-          >
-            +
-          </button>
-        </form>
+        <div className=" flex justify-between items-center my-4 w-full px-6">
+          <form className="w-4/6" onSubmit={handleSubmitNewItem}>
+            <div className="flex justify-between items-center w-full">
+              <label className="mr-4" htmlFor="item">
+                Item
+              </label>
+              <input
+                id="item"
+                className="w-full bg-secondary/60 py-1 px-4 rounded-sm focus:outline-none mr-4"
+                type="text"
+                value={newItemValue}
+                onChange={(e) => setNewItemValue(e.target.value)}
+              />
+            </div>
+          </form>
+          <>
+            <Filter setFilterId={setFilterId} />
+          </>{" "}
+        </div>
         {/*  */}
         <div className="px-20 mt-10">
           {items?.length > 0 ? (
@@ -184,6 +196,7 @@ const EditList = () => {
                     setItem={setItem}
                     handleMarkCompleteItem={handleMarkCompleteItem}
                     handleDeleteItem={handleDeleteItem}
+                    filterId={filterId}
                   />
                 </div>
               );
