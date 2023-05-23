@@ -1,24 +1,21 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseURL = "https://vwgdhyxinukcwwgbsphq.supabase.co";
+const supabaseURL = "https://lpnctllpxscniumytgbu.supabase.co";
 const anonKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3Z2RoeXhpbnVrY3d3Z2JzcGhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODM1MzM4ODksImV4cCI6MTk5OTEwOTg4OX0.tvxdgt1V1QJuWRL_yJRo4ukhlDzjy0g_046T85txthw";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwbmN0bGxweHNjbml1bXl0Z2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODQ4NDQ4MTMsImV4cCI6MjAwMDQyMDgxM30.A3irGazn8hy2qQoMNKur1wwIewRtZttSeRT1pZ8_Hlg";
 const supabase = createClient(supabaseURL, anonKey);
 
 export const signUpUser = async ({ firstName, lastName, email, password }) => {
   const { data, error } = await supabase.auth.signUp({
-    firstName,
-    lastName,
     email,
     password,
   });
 
   const userData = await supabase.from("users").insert({
-    first_name: firstName,
-    last_name: lastName,
-    email,
+    first_name: firstName.trim(),
+    last_name: lastName.trim(),
+    email: email.trim(),
   });
-  console.log(userData);
   return { data, error };
 };
 
@@ -43,6 +40,7 @@ export const getUserData = async (userEmail) => {
     .select("*")
     .eq("email", userEmail)
     .single();
+  console.log(data);
   return { data };
 };
 
